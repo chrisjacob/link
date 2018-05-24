@@ -7,5 +7,4 @@ analytics_account: "UA-XXXXXXXXX"
 
 # build settings
 plugins:
-  - jekyll-seo-tag
   - jekyll-sitemap
