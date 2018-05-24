@@ -1,0 +1,13 @@
+# global settings
+title: "Links"
+description: "Links to pages"
+permalink: "/:title"
+url: https://chrisjacob.github.com/link
+analytics_account: "UA-XXXXXXXXX"
+
+# build settings
+exclude: ["vendor", "README.md"]
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
