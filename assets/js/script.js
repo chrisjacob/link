@@ -10,7 +10,7 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 };
 
-var APP.url = getUrlParameter('url'); // "?url=https://google.com" -> "https://google.com"
+APP.url = getUrlParameter('url'); // "?url=https://google.com" -> "https://google.com"
 
 console.log('URL:');
 console.log(APP.url);
