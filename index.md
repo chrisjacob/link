@@ -1,1 +1,8 @@
-Hello link
+---
+layout: link
+title: Home for Links
+description: Link to stuff...
+permalink: /
+---
+
+<h1>Hello links!</h1>
