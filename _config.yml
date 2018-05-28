@@ -1,10 +1,14 @@
 # global settings
 title: "Links"
 description: "Links to pages"
-permalink: "/:title"
 url: https://chrisjacob.github.com/link
+github_user: chrisjacob
+github_repo: link
+permalink: "/:title"
 analytics_account: "UA-XXXXXXXXX"
 
 # build settings
 plugins:
   - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-redirect-from
