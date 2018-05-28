@@ -7,3 +7,6 @@
 - URL: 'http://example.com'
   Title: Example Title
   Slug: example-website
+- URL: 'https://another.com'
+  Title: Another
+  Slug: another
