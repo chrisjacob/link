@@ -110,22 +110,24 @@ title: Update Spreadsheet
 
         api.commit([{
           path: '_posts/2018-06-01-file1.md',
-          content: `
----
+          content: `---
 layout: default
 title: This is an example - File 1.
 ---
 
-# File1`
+# File1
+
+`
         }, {
           path: '_posts/2018-06-01-file2.html',
-          content: `
----
+          content: `---
 layout: default
 title: This is an example - File 2.
 ---
 
-<h1>File2</h1>`
+<h1>File2</h1>
+
+`
         }], 'test commit via api - posts'); // returns a promise
     });
     
