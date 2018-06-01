@@ -13,7 +13,7 @@ title: Update Spreadsheet
 
 <script src="{{ "/assets/js/octokat.js" | relative_url}}?{{site.time | date: '%s%N'}}"></script>
 
-<h1>Update 2</h1>
+<h1>Update 3</h1>
 <script type="text/javascript">
     // Reset the cookie manually
     //Cookies.expire('token');
@@ -109,12 +109,12 @@ title: Update Spreadsheet
         var api = init();
 
         api.commit([{
-          path: 'test/file1.md',
-          content: '# File1'
+          path: 'test/file1_3.md',
+          content: '# File1_3'
         }, {
-          path: 'test/file2.md',
-          content: '# File2'
-        }], 'test commit via api'); // returns a promise
+          path: 'test/file2_3.md',
+          content: '# File2_3'
+        }], 'test commit via api 3'); // returns a promise
     });
     
     /*
