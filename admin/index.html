@@ -11,6 +11,8 @@ title: Update Spreadsheet
 <script type="text/javascript" src="https://contrafabulists-toolbox.github.io/master/javascript/js-yaml.min.js"></script>
 <script type="text/javascript" src="https://contrafabulists-toolbox.github.io/master/javascript/github.js"></script>
 
+<script src="{{ "/assets/js/octokat.js" | relative_url}}?{{site.time | date: '%s%N'}}"></script>
+
 <h1>Update</h1>
 <script type="text/javascript">
     // Reset the cookie manually
@@ -33,6 +35,89 @@ title: Update Spreadsheet
       }
     // Grab the token from cookie
     $oAuthToken = Cookies.get('token');
+    
+    
+    $(document).ready( function() {
+      
+       function init() {
+          var options = {
+              branchName: $branch,
+              token: $oAuthToken,
+              username: $org,
+              reponame: $repo
+          };  
+          var head;
+
+          var octo = new Octokat({
+            token: options.token
+          });
+          var repo = octo.repos(options.username, options.reponame);
+
+          function fetchHead() {
+            return repo.git.refs.heads(options.branchName).fetch();
+          }
+
+          function fetchTree() {
+            return fetchHead().then(function(commit) {
+              head = commit;
+              return repo.git.trees(commit.object.sha).fetch();
+            });
+          }
+
+          function commit(files, message) {
+            return Promise.all(files.map(function(file) {
+              return repo.git.blobs.create({
+                content: file.content,
+                encoding: 'utf-8'
+              });
+            })).then(function(blobs) {
+              return fetchTree().then(function(tree) {
+                return repo.git.trees.create({
+                  tree: files.map(function(file, index) {
+                    return {
+                      path: file.path,
+                      mode: '100644',
+                      type: 'blob',
+                      sha: blobs[index].sha
+                    };
+                  }),
+                  basetree: tree.sha
+                });
+              });
+            }).then(function(tree) {
+              return repo.git.commits.create({
+                message: message,
+                tree: tree.sha,
+                parents: [
+                  head.object.sha
+                ]
+              });
+            }).then(function(commit) {
+              return repo.git.refs.heads(options.branchName).update({
+                sha: commit.sha
+              });
+            });
+
+          }
+        
+          return {
+            commit: commit
+          };
+        }
+        
+        
+        var api = init();
+
+        api.commit([{
+          path: 'test/file1.md',
+          content: '# File1'
+        }, {
+          path: 'test/file2.md',
+          content: '# File2'
+        }], 'test commit via api'); // returns a promise
+    });
+    
+    /*
     $(document).ready( function() {
       Tabletop.init( { key: $key,
                        callback: showInfo,
@@ -84,6 +169,6 @@ title: Update Spreadsheet
               });
             }
       });
-    }
+    }*/
 </script>
 <textarea cols="10" rows="5" id="source" style="border: 1px solid #000; width: 100%; height: 350px;"></textarea>
