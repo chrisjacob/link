@@ -12,3 +12,34 @@ plugins:
   - jekyll-sitemap
   - jekyll-feed
   - jekyll-redirect-from
+  - jekyll-github-metadata
+
+# Customizing GitHub Pages / Configuring Jekyll
+# https://help.github.com/articles/configuring-jekyll/
+
+# Defaults you can change...
+# The following defaults are set by GitHub, which you are free to override:
+# See https://help.github.com/articles/repository-metadata-on-github-pages/
+#github: [metadata]
+encoding: UTF-8
+kramdown:
+ input: GFM
+ hard_wrap: false
+future: true
+jailed: false
+theme: jekyll-theme-primer
+gfm_quirks: paragraph_end
+
+# Configuration settings you cannot change...
+# GitHub Pages & Jekyll override the following settings in your _config.yml file,
+# which you cannot change:
+lsi: false
+safe: true
+#source: [your repo's top level directory]
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
