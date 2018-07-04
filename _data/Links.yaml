@@ -10,3 +10,6 @@
 - URL: 'https://another.com'
   Title: Another
   Slug: another
+- URL: 'https://new.com'
+  Title: New
+  Slug: new
