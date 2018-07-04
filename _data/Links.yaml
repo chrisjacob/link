@@ -13,3 +13,6 @@
 - URL: 'https://new.com'
   Title: New
   Slug: new
+- URL: 'https://api.com'
+  Title: API
+  Slug: api
