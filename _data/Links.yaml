@@ -13,11 +13,11 @@
 - URL: 'https://another.com'
   Title: Another
   Slug: another
-  Private: 'YES'
+  Private: 'TRUE'
 - URL: 'https://new.com'
   Title: New
   Slug: new
-  Private: 'YES'
+  Private: 'TRUE'
 - URL: 'https://api.com'
   Title: API
   Slug: api
