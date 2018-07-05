@@ -15,174 +15,156 @@ title: Update Spreadsheet
 
 <h1>Update 3</h1>
 <script type="text/javascript">
-    // Reset the cookie manually
-    //Cookies.expire('token');
-    // URL: https://chrisjacob.github.io/link/admin/?key=19GD3poZ_UHvB5BbzW4hgkEzlZFXday2-L19ZBdV9ocY&worksheet=Links&org=chrisjacob&repo=link&branch=master&token=
-    // Incoming Variables append
-    var $key = "19GD3poZ_UHvB5BbzW4hgkEzlZFXday2-L19ZBdV9ocY"; // getUrlVar('key');
-    var $resource = "Links"; //getUrlVar('worksheet');
-    var $oAuthToken = getUrlVar('token');
-    var $org = "chrisjacob"; // getUrlVar('org');
-    var $repo = "link"; // getUrlVar('repo');
-    var $branch = "master"; // getUrlVar('branch');
-    var $yaml_store = "";
-    if($oAuthToken !='')
-      {
-      // Setting a cookie value
-      Cookies.set('token', $oAuthToken);
-      // Set with expiration
-      // Cookies.set('token', $oAuthToken, { expires: '01/01/2017' });
+  // Reset the cookie manually
+  //Cookies.expire('token');
+
+  // URL: https://chrisjacob.github.io/link/admin/?key=19GD3poZ_UHvB5BbzW4hgkEzlZFXday2-L19ZBdV9ocY&worksheet=Links&org=chrisjacob&repo=link&branch=master&token=
+  // Incoming Variables append
+  var $key = "19GD3poZ_UHvB5BbzW4hgkEzlZFXday2-L19ZBdV9ocY"; // getUrlVar('key'); // Google Sheets ID
+  var $worksheet = "Links"; //getUrlVar('worksheet'); // Worksheet tab
+  var $oAuthToken = getUrlVar('token'); // GitHub OAuth token
+  var $org = "chrisjacob"; // getUrlVar('org'); // GitHub User or Organisation
+  var $repo = "link"; // getUrlVar('repo'); // GitHub Repository
+  var $branch = "master"; // getUrlVar('branch'); // GitHub Branch
+  var $yaml_store = "";
+  if($oAuthToken !='') {
+    // Setting a cookie value
+    Cookies.set('token', $oAuthToken);
+    // Set with expiration
+    // Cookies.set('token', $oAuthToken, { expires: '01/01/2017' });
+  }
+  // Grab the token from cookie
+  var $oAuthToken = Cookies.get('token');
+
+  $(document).ready( function() {
+    function init() {
+      var options = {
+        branchName: $branch,
+        token: $oAuthToken,
+        username: $org,
+        reponame: $repo
+      };
+      var head;
+      var octo = new Octokat({
+        token: options.token
+      });
+      var repo = octo.repos(options.username, options.reponame);
+
+      function fetchHead() {
+        return repo.git.refs.heads(options.branchName).fetch();
       }
-    // Grab the token from cookie
-    $oAuthToken = Cookies.get('token');
-    
-    
-    $(document).ready( function() {
-      
-       function init() {
-          var options = {
-              branchName: $branch,
-              token: $oAuthToken,
-              username: $org,
-              reponame: $repo
-          };  
-          var head;
 
-          var octo = new Octokat({
-            token: options.token
+      function fetchTree() {
+        return fetchHead().then(function(commit) {
+          head = commit;
+          return repo.git.trees(commit.object.sha).fetch();
+        });
+      }
+
+      function commit(files, message) {
+        return Promise.all(files.map(function(file) {
+          return repo.git.blobs.create({
+            content: file.content,
+            encoding: 'utf-8'
           });
-          var repo = octo.repos(options.username, options.reponame);
-
-          function fetchHead() {
-            return repo.git.refs.heads(options.branchName).fetch();
-          }
-
-          function fetchTree() {
-            return fetchHead().then(function(commit) {
-              head = commit;
-              return repo.git.trees(commit.object.sha).fetch();
+        })).then(function(blobs) {
+          return fetchTree().then(function(tree) {
+            return repo.git.trees.create({
+              tree: files.map(function(file, index) {
+                return {
+                  path: file.path,
+                  mode: '100644',
+                  type: 'blob',
+                  sha: blobs[index].sha
+                };
+              }),
+              base_tree: tree.sha
             });
-          }
+          });
+        }).then(function(tree) {
+          return repo.git.commits.create({
+            message: message,
+            tree: tree.sha,
+            parents: [
+              head.object.sha
+            ]
+          });
+        }).then(function(commit) {
+          return repo.git.refs.heads(options.branchName).update({
+            sha: commit.sha
+          });
+        });
+      }
 
-          function commit(files, message) {
-            return Promise.all(files.map(function(file) {
-              return repo.git.blobs.create({
-                content: file.content,
-                encoding: 'utf-8'
-              });
-            })).then(function(blobs) {
-              return fetchTree().then(function(tree) {
-                return repo.git.trees.create({
-                  tree: files.map(function(file, index) {
-                    return {
-                      path: file.path,
-                      mode: '100644',
-                      type: 'blob',
-                      sha: blobs[index].sha
-                    };
-                  }),
-                  base_tree: tree.sha
-                });
-              });
-            }).then(function(tree) {
-              return repo.git.commits.create({
-                message: message,
-                tree: tree.sha,
-                parents: [
-                  head.object.sha
-                ]
-              });
-            }).then(function(commit) {
-              return repo.git.refs.heads(options.branchName).update({
-                sha: commit.sha
-              });
-            });
+      function commitpages(pages, yaml_dump){
+        var $files = new Array();
 
-          }
-        
-          return {
-            commit: commit
-          };
-        }
-        
-        
-        var api = init();
+        $files.push({
+          path: '_data/'+$worksheet+'.yaml',
+          content: yaml_dump
+        });
 
-        api.commit([{
-          path: '_posts/2018-06-01-file1.md',
-          content: `---
+        $.each( pages, function(i, page) {
+          var timestamp = new Date(Date.now()).toISOString().split('T')[0]; // UTC
+          var $f = {
+path: '_posts/2018-06-01-'+page['Slug']+'.md',
+content: `---
 layout: default
-title: This is an example - File 1.
+title: ${ page['Title'] }
 ---
 
-# File1
+# ${ page['Title'] }
+
+[Go to link](${ page['URL'] })
 
 `
-        }, {
-          path: '_posts/2018-06-01-file2.html',
-          content: `---
-layout: default
-title: This is an example - File 2.
----
+};
+          $files.push($f);
+        });
 
-<h1>File2</h1>
+        api.commit($files, 'Pages updated UTC: ' + new Date(Date.now()).toISOString()); // returns a promise
+      }
 
-`
-        }], 'test commit via api - posts'); // returns a promise
+      function updatepages(data, tabletop) {
+        $("#table_info").append("<p>We found the tables: " + tabletop.model_names.join(", ") + "</p>");
+        $.each( tabletop.sheets(), function(i, sheet) {
+          $("#sheet_info").append("<p>The table " + sheet.name + ", has columns: " + sheet.column_names.join(", ") + "</p>");
+        });
+
+        var $pages = new Array();
+        var $worksheet_rows = tabletop.sheets($worksheet).all();
+
+        $.each( $worksheet_rows, function(i, row) {
+          var $p = {};
+          $.each(row, function($column, $value) {
+            $p[$column] = $value;
+          });
+          $pages.push($p);
+        });
+
+        var $yaml_dump = jsyaml.dump($pages);
+        $("#yaml").val($yaml_dump);
+
+        api.commitpages($pages, $yaml_dump);
+      };
+
+      return {
+        commit: commit,
+        commitpages: commitpages,
+        updatepages: updatepages
+      };
+    }
+
+    var api = init();
+    Tabletop.init({
+      key: $key,
+      callback: api.updatepages,
+      wanted: [ $worksheet ],
+      debug: true
     });
-    
-    /*
-    $(document).ready( function() {
-      Tabletop.init( { key: $key,
-                       callback: showInfo,
-                       wanted: [ $resource ],
-                       debug: true } )
-    })
-    console.log($resource);
-    function showInfo(data, tabletop) {
-      $products = new Array();
-      $("#table_info").text("We found the tables " + tabletop.model_names.join(", "));
-      $.each( tabletop.sheets(), function(i, sheet) {
-        $("#table_info").append("<p>" + sheet.name + " has " + sheet.column_names.join(", ") + "</p>");
-      });
-      $product = tabletop.sheets($resource).all();
-      $count = 0;
-      $total_count = $product.length;
-      $.each( tabletop.sheets($resource).all(), function(i, service) {
-          $p = {};
-          $.each(service, function($key, $value) {
-            //console.log($key + ' == ' + $value);
-            $p[$key] = $value;
-          });
-          $products.push($p);
-          $count++;
-          //console.log($count + ' == ' + $total_count);
-          if($count==$total_count)
-            {
-            $yaml_dump = jsyaml.dump($products);
-            document.getElementById('source').value = $yaml_dump;
-            // Grab the token from cookie
-            $oAuthToken = Cookies.get('token');
-            var github = new Github({token: $oAuthToken,auth: "oauth"});
-            var repo = github.getRepo($org,$repo);
-            $writepath = '_data/' + $resource + '.yaml';
-            repo.write($branch,$writepath, $yaml_dump, 'Save', function(err) { });
-            console.log("writing 1:" + $writepath);
-            repo.getTree($branch + '?recursive=true', function(err, tree) {
-              $.each(tree, function(treeKey, treeValue) {
-                $path = treeValue['path'];
-                $sha = treeValue['sha'];
-                //console.log($path + ' == ' + $writepath);
-                if($path==$writepath)
-                  {
-                  repo.writemanual($branch,$writepath, $yaml_dump, 'Save', $sha, function(err) { });
-                  console.log("writing 2:" + $writepath);
-                  //alert("saved " + $writepath);
-                  }
-                });
-              });
-            }
-      });
-    }*/
+  });
 </script>
-<textarea cols="10" rows="5" id="source" style="border: 1px solid #000; width: 100%; height: 350px;"></textarea>
+
+<div id="table_info"></div>
+<div id="sheet_info"></div>
+<textarea cols="10" rows="5" id="yaml" style="border: 1px solid #000; width: 100%; height: 350px;"></textarea>
