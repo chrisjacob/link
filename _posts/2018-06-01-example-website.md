@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Example Title
-date: 2018-07-06 06:03:36
+date: 2018-07-06 06:18:16
 ---
 
 # Example Title
