@@ -1,18 +1,24 @@
 - URL: 'https://google.com'
   Title: Google!
   Slug: google
+  Private: ''
 - URL: 'https://facebook.com'
   Title: Facebook!
   Slug: facebook
+  Private: ''
 - URL: 'http://example.com'
   Title: Example Title
   Slug: example-website
+  Private: ''
 - URL: 'https://another.com'
   Title: Another
   Slug: another
+  Private: 'YES'
 - URL: 'https://new.com'
   Title: New
   Slug: new
+  Private: 'YES'
 - URL: 'https://api.com'
   Title: API
   Slug: api
+  Private: ''
