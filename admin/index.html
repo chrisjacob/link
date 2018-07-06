@@ -22,7 +22,8 @@ title: Update Spreadsheet
   // Incoming Variables append
   var $key = "19GD3poZ_UHvB5BbzW4hgkEzlZFXday2-L19ZBdV9ocY"; // getUrlVar('key'); // Google Sheets ID
   var $worksheet = "Links"; //getUrlVar('worksheet'); // Worksheet tab
-  var $oAuthToken = getUrlVar('token'); // GitHub OAuth token
+  var $oAuthToken = getUrlVar('token'); // GitHub.com OAuth token
+  var $openGraphKey = getUrlVar('opengraphkey'); // OpenGraph.io API Key
   var $org = "chrisjacob"; // getUrlVar('org'); // GitHub User or Organisation
   var $repo = "link"; // getUrlVar('repo'); // GitHub Repository
   var $branch = "master"; // getUrlVar('branch'); // GitHub Branch
@@ -138,7 +139,27 @@ private: ${ page['Private'] }
         });
 
         api.commit($files, 'Pages updated ' + timestamp); // returns a promise
-      }
+      };
+
+      function getmetadata(url) {
+        if($openGraphKey) {
+          var urlEncoded = encodeURIComponent(url);
+          var apiKey = $openGraphKey; // <-- Replace with your app_id from https://www.opengraph.io/
+          var forceCacheUpdate = 'false';
+          var fullRender = 'true'; // execute JavaScript before reading HTML tags
+
+          // The entire request is just a simple get request with optional query parameters
+          var requestUrl = "https://opengraph.io/api/1.1/site/" + urlEncoded + '?app_id=' + apiKey + '&cache_ok=' + forceCacheUpdate + '&full_render=' + fullRender;
+
+          $.getJSON(requestUrl, function( json ) {
+            // Throw the object in the console to see what it looks like!
+            console.log('json', json);
+            return json;
+          });
+        } else {
+          return "Please set your OpenGraph.io API Key"
+        }
+      };
 
       function updatepages(data, tabletop) {
         $("#table_info").append("<p>We found the tables: " + tabletop.model_names.join(", ") + "</p>");
@@ -149,11 +170,12 @@ private: ${ page['Private'] }
         var $pages = new Array();
         var $worksheet_rows = tabletop.sheets($worksheet).all();
 
-        $.each( $worksheet_rows, function(i, row) {
+        $.each( $worksheet_rows, function(i, columns) {
           var $p = {};
-          $.each(row, function($column, $value) {
+          $.each(columns, function($column, $value) {
             $p[$column] = $value;
           });
+          $p['Meta'] = api.getmetadata($p['URL']);
           $pages.push($p);
         });
 
@@ -166,6 +188,7 @@ private: ${ page['Private'] }
       return {
         commit: commit,
         commitpages: commitpages,
+        getmetadata: getmetadata,
         updatepages: updatepages
       };
     }
