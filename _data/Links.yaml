@@ -1,40 +1,64 @@
-- URL: 'https://google.com'
-  Title: Google!
-  Slug: google
-  Private: ''
-  Meta: !<tag:yaml.org,2002:js/undefined> ''
-- URL: 'https://facebook.com'
-  Title: Facebook!
-  Slug: facebook
-  Private: ''
-  Meta: !<tag:yaml.org,2002:js/undefined> ''
-- URL: 'http://example.com'
-  Title: Example Title
-  Slug: example-website
-  Private: ''
-  Meta: !<tag:yaml.org,2002:js/undefined> ''
-- URL: 'https://another.com'
-  Title: Another
-  Slug: another
-  Private: 'TRUE'
-  Meta: !<tag:yaml.org,2002:js/undefined> ''
-- URL: 'https://new.com'
-  Title: New
-  Slug: new
-  Private: 'TRUE'
-  Meta: !<tag:yaml.org,2002:js/undefined> ''
-- URL: 'https://api.com'
-  Title: API
-  Slug: api
-  Private: ''
-  Meta: !<tag:yaml.org,2002:js/undefined> ''
-- URL: 'http://blog.close.io/outreach-email-reply'
-  Title: Close IO
-  Slug: outreach-email-reply
-  Private: ''
-  Meta: !<tag:yaml.org,2002:js/undefined> ''
-- URL: 'https://blog.bufferapp.com/facebook-algorithm'
-  Title: Buffer
-  Slug: facebook-algorithm
-  Private: ''
-  Meta: !<tag:yaml.org,2002:js/undefined> ''
+- url: 'https://google.com'
+  title: Google!
+  slug: google
+  private: ''
+  ogtitle: ''
+  ogdescription: ''
+  ogimage: ''
+  domain: google.com
+- url: 'https://facebook.com'
+  title: Facebook!
+  slug: facebook
+  private: ''
+  ogtitle: ''
+  ogdescription: ''
+  ogimage: ''
+  domain: facebook.com
+- url: 'http://example.com'
+  title: Example Title
+  slug: example-website
+  private: ''
+  ogtitle: ''
+  ogdescription: ''
+  ogimage: ''
+  domain: example.com
+- url: 'https://another.com'
+  title: Another
+  slug: another
+  private: 'TRUE'
+  ogtitle: ''
+  ogdescription: ''
+  ogimage: ''
+  domain: another.com
+- url: 'https://new.com'
+  title: New
+  slug: new
+  private: 'TRUE'
+  ogtitle: ''
+  ogdescription: ''
+  ogimage: ''
+  domain: new.com
+- url: 'https://api.com'
+  title: API
+  slug: api
+  private: ''
+  ogtitle: ''
+  ogdescription: ''
+  ogimage: ''
+  domain: api.com
+- url: 'http://blog.close.io/outreach-email-reply'
+  title: Close IO
+  slug: outreach-email-reply
+  private: ''
+  ogtitle: ''
+  ogdescription: ''
+  ogimage: ''
+  domain: blog.close.io
+- url: 'https://blog.bufferapp.com/facebook-algorithm'
+  title: Buffer
+  slug: facebook-algorithm
+  private: ''
+  ogtitle: ''
+  ogdescription: ''
+  ogimage: ''
+  domain: blog.bufferapp.com
