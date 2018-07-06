@@ -121,17 +121,23 @@ title: Update Spreadsheet
         $.each( pages, function(i, page) {
           // Don't worry about the date 2018-06-01 in the filename it's irrelevant
           var $f = {
-path: '_posts/2018-06-01-'+page['Slug']+'.md',
+path: '_posts/2018-06-01-'+page['slug']+'.md',
 content: `---
 layout: default
-title: ${ page['Title'] }
+title: ${ page['title'] }
 date: ${ timestamp }
-private: ${ page['Private'] }
+private: ${ page['private'] }
 ---
 
-# ${ page['Title'] }
+# ${ page['title'] }
 
-[Go to link](${ page['URL'] })
+[Go to link](${ page['url'] })
+
+OGTitle: ${ page['ogtitle'] }
+OGDescription: ${ page['ogdescription'] }
+OGImage: ${ page['ogimage'] }
+
+Domain: ${ page['domain'] }
 
 `
 };
@@ -157,7 +163,7 @@ private: ${ page['Private'] }
             return json;
           });
         } else {
-          return "Please set your OpenGraph.io API Key"
+          return false; // Please set your OpenGraph.io API Key
         }
       };
 
@@ -175,7 +181,27 @@ private: ${ page['Private'] }
           $.each(columns, function($column, $value) {
             $p[$column] = $value;
           });
-          $p['Meta'] = api.getmetadata($p['URL']);
+
+          // get OpenGraph meta data for URL
+          var meta = api.getmetadata($p['url']);
+          $p['ogtitle'] = '';
+          $p['ogdescription'] = '';
+          $p['ogimage'] = '';
+          if(meta) {
+            $p['ogtitle'] = (meta.hybridGraph.title) ? meta.hybridGraph.title : '';
+            $p['ogdescription'] = (meta.hybridGraph.description) ? meta.hybridGraph.description : '';
+            $p['ogimage'] = (meta.hybridGraph.image) ? meta.hybridGraph.image : '';
+            // Idea: extract URL slug for an auto-slug feature?
+            // Suffix with a domain to ensure uniqueness
+            // e.g. example-title_facebook or outreach-email-reply_blog-close-io
+          }
+
+          // Get domain (www.example.com) from the URL (https://www.example.com/foo)
+          // source: https://stackoverflow.com/a/8498629
+          var matches = $p['url'].match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
+          var domain = matches && matches[1];  // domain will be null if no match is found
+          $p['domain'] = domain;
+
           $pages.push($p);
         });
 
