@@ -1,1 +1,88 @@
-[]
+- url: 'https://another.com'
+  title: Another
+  slug: another
+  private: 'TRUE'
+  domain: another.com
+  ogtitle: Portal Home - Another.com
+  ogdescription: "\n\t\t\t\t\t\t\t\t\t\t\t\t\tGot bitcoins to spend?You can now fill your account or pay for single domains at Another.com using bitcoins. As you may know the value of bitcoins has surged lately and this is probably a good time to start putting your coins into good use.\_Our bitcoin payment process is fully automated, and completed in minutes. As always, you can contact us if ...\n\t\t\t\t\t\t\tRead More »\n\t\t\t\t\t\t\t\t\t\t\t"
+  ogimage: ''
+- url: 'http://example.com'
+  title: Example Title
+  slug: example-website
+  private: ''
+  domain: example.com
+  ogtitle: Example Domain
+  ogdescription: >-
+    This domain is established to be used for illustrative examples in
+    documents. You may use this
+        domain in examples without prior coordination or asking for permission.
+  ogimage: ''
+- url: 'https://facebook.com'
+  title: Facebook!
+  slug: facebook
+  private: ''
+  domain: facebook.com
+  ogtitle: Facebook - Log In or Sign Up
+  ogdescription: >-
+    Create an account or log into Facebook. Connect with friends, family and
+    other people you know. Share photos and videos, send messages and get
+    updates.
+  ogimage: 'https://static.xx.fbcdn.net/rsrc.php/v3/y3/r/eRMla8OeKV0.png'
+- url: 'https://google.com'
+  title: Google!
+  slug: google
+  private: ''
+  domain: google.com
+  ogtitle: Google
+  ogdescription: >-
+    Search the world's information, including webpages, images, videos and more.
+    Google has many special features to help you find exactly what you're
+    looking for.
+  ogimage: >-
+    https://google.com/images/branding/googlelogo/1x/googlelogo_white_background_color_272x92dp.png
+- url: 'http://blog.close.io/outreach-email-reply'
+  title: Close IO
+  slug: outreach-email-reply
+  private: ''
+  domain: blog.close.io
+  ogtitle: This is how you get a reply to your outreach without annoying people
+  ogdescription: >-
+    Here's how to make people respond to your outreach emails, and open up the
+    door for a conversation to eventually close a deal.
+  ogimage: >-
+    https://blog.close.io/hubfs/get-a-reply-without-annoying.jpg?t=1530817265776#keepProtocol
+- url: 'https://api.com'
+  title: API
+  slug: api
+  private: ''
+  domain: api.com
+  ogtitle: Research & Biopharmaceutical Manufacturing - GE Healthcare Life Sciences
+  ogdescription: >-
+    We offer solutions to support your work from biological research to clinical
+    therapy, including tools for research, drug discovery, diagnostics and
+    bioprocessing.
+  ogimage: ''
+- url: 'https://blog.bufferapp.com/facebook-algorithm'
+  title: Buffer
+  slug: facebook-algorithm
+  private: ''
+  domain: blog.bufferapp.com
+  ogtitle: >-
+    The New Facebook Algorithm: Secrets Behind How It Works and What You Can Do
+    To Succeed
+  ogdescription: >-
+    An inside look into the brand new Facebook Algorithm for 2018 with
+    information directly from an exclusive News Feed webinar for publishers.
+    Here's what brands and marketers need to know.
+  ogimage: >-
+    https://blog.bufferapp.com/wp-content/uploads/2018/02/The-New-Facebook-Algorithm-2018-How-It-Works-and-What-Brands-Can-Do-To-Succeed.jpg
+- url: 'https://new.com'
+  title: New
+  slug: new
+  private: 'TRUE'
+  domain: new.com
+  ogtitle: Latest Trends on Pop Culture and Technology
+  ogdescription: >-
+    Read the most recent trends and releases on products, technology,
+    entertainment, fashion, music and more. 
+  ogimage: 'https://new.com/assets/upload/4/5u3eibbb3yhxq7px.png'
