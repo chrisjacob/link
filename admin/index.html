@@ -48,6 +48,29 @@ title: Update Spreadsheet
     return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
   }
 
+  // Source: https://hermanradtke.com/2011/05/12/managing-multiple-jquery-promises.html
+  var all = function(array){
+    var deferred = $.Deferred();
+    var fulfilled = 0, length = array.length;
+    var results = [];
+
+    if (length === 0) {
+      deferred.resolve(results);
+    } else {
+      array.forEach(function(promise, i){
+        $.when(promise()).then(function(value) {
+          results[i] = value;
+          fulfilled++;
+          if(fulfilled === length){
+            deferred.resolve(results);
+          }
+        });
+      });
+    }
+
+    return deferred.promise();
+  };
+
   $(document).ready( function() {
     function init() {
       var options = {
@@ -167,7 +190,8 @@ Domain: ${ page['domain'] }
           $("#sheet_info").append("<p>The table " + sheet.name + ", has columns: " + sheet.column_names.join(", ") + "</p>");
         });
 
-        var $pages = new Array();
+        var $pages = [];
+        var promises = [];
         var $worksheet_rows = tabletop.sheets($worksheet).all();
 
         $.each( $worksheet_rows, function(i, columns) {
@@ -186,29 +210,36 @@ Domain: ${ page['domain'] }
           $p['ogtitle'] = '';
           $p['ogdescription'] = '';
           $p['ogimage'] = '';
-          api.getmetadata($p['url']).then(function(json){
-            // Get succeeded
-            // Throw the object in the console to see what it looks like!
-            console.log('json', json);
-            if(json && json.hybridGraph) {
-              $p['ogtitle'] = (json.hybridGraph.title) ? json.hybridGraph.title : '';
-              $p['ogdescription'] = (json.hybridGraph.description) ? json.hybridGraph.description : '';
-              $p['ogimage'] = (json.hybridGraph.image) ? json.hybridGraph.image : '';
-              // Idea: extract URL slug for an auto-slug feature?
-              // Suffix with a domain to ensure uniqueness
-              // e.g. example-title_facebook or outreach-email-reply_blog-close-io
-            }
-            $pages.push($p);
-          }, function() {
-            // Get failed
-            $pages.push($p);
+          promises.push(function() {
+            return $.Deferred(function(dfd) {
+              api.getmetadata($p['url']).then(function(json){
+                // Get succeeded
+                // Throw the object in the console to see what it looks like!
+                console.log('json', json);
+                if(json && json.hybridGraph) {
+                  $p['ogtitle'] = (json.hybridGraph.title) ? json.hybridGraph.title : '';
+                  $p['ogdescription'] = (json.hybridGraph.description) ? json.hybridGraph.description : '';
+                  $p['ogimage'] = (json.hybridGraph.image) ? json.hybridGraph.image : '';
+                  // Idea: extract URL slug for an auto-slug feature?
+                  // Suffix with a domain to ensure uniqueness
+                  // e.g. example-title_facebook or outreach-email-reply_blog-close-io
+                }
+                $pages.push($p);
+                dfd.resolve(json);
+              }).promise();
+            });
           });
         });
 
-        var $yaml_dump = jsyaml.dump($pages);
-        $("#yaml").val($yaml_dump);
+        $.when(all(promises)).then(function(results) {
+            // do something with the results
+            console.log('results...', results);
 
-        api.commitpages($pages, $yaml_dump);
+            var $yaml_dump = jsyaml.dump($pages);
+            $("#yaml").val($yaml_dump);
+
+            api.commitpages($pages, $yaml_dump);
+        });
       };
 
       return {
