@@ -2,23 +2,39 @@
   Title: Google!
   Slug: google
   Private: ''
+  Meta: !<tag:yaml.org,2002:js/undefined> ''
 - URL: 'https://facebook.com'
   Title: Facebook!
   Slug: facebook
   Private: ''
+  Meta: !<tag:yaml.org,2002:js/undefined> ''
 - URL: 'http://example.com'
   Title: Example Title
   Slug: example-website
   Private: ''
+  Meta: !<tag:yaml.org,2002:js/undefined> ''
 - URL: 'https://another.com'
   Title: Another
   Slug: another
   Private: 'TRUE'
+  Meta: !<tag:yaml.org,2002:js/undefined> ''
 - URL: 'https://new.com'
   Title: New
   Slug: new
   Private: 'TRUE'
+  Meta: !<tag:yaml.org,2002:js/undefined> ''
 - URL: 'https://api.com'
   Title: API
   Slug: api
   Private: ''
+  Meta: !<tag:yaml.org,2002:js/undefined> ''
+- URL: 'http://blog.close.io/outreach-email-reply'
+  Title: Close IO
+  Slug: outreach-email-reply
+  Private: ''
+  Meta: !<tag:yaml.org,2002:js/undefined> ''
+- URL: 'https://blog.bufferapp.com/facebook-algorithm'
+  Title: Buffer
+  Slug: facebook-algorithm
+  Private: ''
+  Meta: !<tag:yaml.org,2002:js/undefined> ''
